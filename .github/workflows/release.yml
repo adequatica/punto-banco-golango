@@ -8,6 +8,9 @@ on:
         required: true
         default: '1.0.0'
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   build:
     name: Build for ${{ matrix.os }}-${{ matrix.arch }}
@@ -108,5 +111,3 @@ jobs:
           punto-banco-darwin-amd64
           punto-banco-darwin-arm64
           punto-banco-windows-amd64.exe
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
