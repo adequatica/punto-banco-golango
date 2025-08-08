@@ -1,0 +1,110 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }}-${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: linux
+            arch: amd64
+            bin_name: punto-banco-linux-amd64
+          - os: linux
+            arch: arm64
+            bin_name: punto-banco-linux-arm64
+          - os: darwin
+            arch: amd64
+            bin_name: punto-banco-darwin-amd64
+          - os: darwin
+            arch: arm64
+            bin_name: punto-banco-darwin-arm64
+          - os: windows
+            arch: amd64
+            bin_name: punto-banco-windows-amd64.exe
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24'
+        cache: true
+
+    - name: Verify dependencies
+      run: go mod verify
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Run unit tests
+      run: go test -v ./...
+
+    - name: Build binary
+      env:
+        GOOS: ${{ matrix.os }}
+        GOARCH: ${{ matrix.arch }}
+        CGO_ENABLED: 0
+      run: |
+        go build -ldflags="-s -w" -o ${{ matrix.bin_name }} ./cmd/main.go
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.bin_name }}
+        path: ${{ matrix.bin_name }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        merge-multiple: true
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ github.event.inputs.version }}
+        name: Release v${{ github.event.inputs.version }}
+        body: |
+          ## Punto Banco Golango v${{ github.event.inputs.version }}
+          
+          A Go implementation of the *punto banco* card game (a version of Baccarat).
+          
+          ### Downloads
+          - Linux (AMD64): `punto-banco-linux-amd64`
+          - Linux (ARM64): `punto-banco-linux-arm64`
+          - macOS (Intel): `punto-banco-darwin-amd64`
+          - macOS (Apple Silicon): `punto-banco-darwin-arm64`
+          - Windows (AMD64): `punto-banco-windows-amd64.exe`
+          
+          ### Features
+          - 6 decks in the shoe;
+          - Casino-style shuffling with shoe cutting and card burning;
+          - Terminal-based UI built with the Bubble Tea framework.
+        files: |
+          punto-banco-linux-amd64
+          punto-banco-linux-arm64
+          punto-banco-darwin-amd64
+          punto-banco-darwin-arm64
+          punto-banco-windows-amd64.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
