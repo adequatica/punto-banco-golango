@@ -98,6 +98,22 @@ jobs:
             - macOS (Apple Silicon): `punto-banco-darwin-arm64`
             - Windows (AMD64): `punto-banco-windows-amd64.exe`
 
+            ### Running the Application
+
+            Make sure to grant execute permissions to the binary on Unix-like systems before running.
+
+            **Linux/macOS:**
+            ```bash
+            # Specify the appropriate version
+            chmod +x punto-banco-darwin-arm64
+            ./punto-banco-darwin-arm64
+            ```
+
+            **Windows:**
+            ```cmd
+            punto-banco-windows-amd64.exe
+            ```
+
             ### Features
             - 6 decks in the shoe;
             - Casino-style shuffling with shoe cutting and card burning;
