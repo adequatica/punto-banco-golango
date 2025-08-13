@@ -17,8 +17,8 @@ go run cmd/main.go
 ## Features
 
 - 6 decks in the shoe
-- Casino-style shuffling with shoe cutting and card burning;
-- Game logic (`PlayPuntoBanco` function from `internal/punto_banco/punto_banco.go`) is separated from the UI, making it reusable for strategy simulations, but [the house always wins](https://paulvanderlaken.com/2018/01/10/baccarat-simulation-payoff/).
+- Casino-style shuffling with shoe cutting and card burning
+- Game logic (`PlayPuntoBanco` function from `internal/punto_banco/punto_banco.go`) is separated from the UI, making it reusable for strategy simulations, but [the house always wins](https://paulvanderlaken.com/2018/01/10/baccarat-simulation-payoff/)
 
 ## Game Rules
 
@@ -50,14 +50,14 @@ The banker's decision to draw a third card depends on both their total and the p
 
 **Banker's total / Player's third card value**
 
-|     | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|-----|---|---|---|---|---|---|---|---|---|---|
-| 0-2 | H | H | H | H | H | H | H | H | H | H |
-| 3   | H | H | H | H | H | H | H | H | S | H |
-| 4   | S | S | H | H | H | H | H | H | S | S |
-| 5   | S | S | S | S | H | H | H | H | S | S |
-| 6   | S | S | S | S | S | S | H | H | S | S |
-| 7+  | S | S | S | S | S | S | S | S | S | S |
+|         | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---------|---|---|---|---|---|---|---|---|---|---|
+| **0-2** | H | H | H | H | H | H | H | H | H | H |
+| **3**   | H | H | H | H | H | H | H | H | S | H |
+| **4**   | S | S | H | H | H | H | H | H | S | S |
+| **5**   | S | S | S | S | H | H | H | H | S | S |
+| **6**   | S | S | S | S | S | S | H | H | S | S |
+| **7+**  | S | S | S | S | S | S | S | S | S | S |
 
 Legend: H (Hit, draw another card), S (Stand, no more cards).
 

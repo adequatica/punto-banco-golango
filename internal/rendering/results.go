@@ -9,10 +9,9 @@ import (
 )
 
 var (
-	winStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("2")) // Green
-	loseStyle            = lipgloss.NewStyle().Foreground(lipgloss.Color("1")) // Red
-	redSuitStyle         = lipgloss.NewStyle().Foreground(lipgloss.Color("5")) // Magenta
-	blackSuitStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("8")) // Gray
+	greenStyle           = lipgloss.NewStyle().Foreground(lipgloss.Color("2")) // Green
+	redStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("1")) // Red
+	blackStyle           = lipgloss.NewStyle().Foreground(lipgloss.Color("8")) // Gray
 	resultIsNotAvailable = "Game result is not available"
 )
 
@@ -40,9 +39,9 @@ func RenderPlayingCard(card *deck.Card) string {
 	playingCard := fmt.Sprintf("%s%s", card.Card, suitSymbol)
 
 	if card.Suit == "Hearts" || card.Suit == "Diamonds" {
-		return redSuitStyle.Render(playingCard)
+		return redStyle.Render(playingCard)
 	} else {
-		return blackSuitStyle.Render(playingCard)
+		return blackStyle.Render(playingCard)
 	}
 }
 
@@ -74,9 +73,9 @@ func RenderBetResult(gameResult *puntobanco.BetType, betString string) string {
 	}
 
 	if betType == *gameResult {
-		return fmt.Sprintf("You %s\n\n", winStyle.Bold(true).Render("won"))
+		return fmt.Sprintf("You %s\n\n", greenStyle.Bold(true).Render("won"))
 	} else {
-		return fmt.Sprintf("You %s\n\n", loseStyle.Bold(true).Render("lost"))
+		return fmt.Sprintf("You %s\n\n", redStyle.Bold(true).Render("lost"))
 	}
 }
 

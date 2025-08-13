@@ -26,11 +26,11 @@ func FormatUserWinsPercentage(value float64) string {
 
 	// Color green, if user wins over 50%
 	if value > 50 {
-		return winStyle.Render(userWinsPercentage) + resetStyle.Render("")
+		return greenStyle.Render(userWinsPercentage) + resetStyle.Render("")
 	}
 	// Color red, if user loses over 50%
 	if value < 50 {
-		return loseStyle.Render(userWinsPercentage) + resetStyle.Render("")
+		return redStyle.Render(userWinsPercentage) + resetStyle.Render("")
 	}
 	return userWinsPercentage
 }
