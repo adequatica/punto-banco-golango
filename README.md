@@ -14,11 +14,13 @@ go run cmd/main.go
 
 <img width="530" src="./screenshot.png" />
 
-## Features
+### Features
 
 - 6 decks in the shoe
 - Casino-style shuffling with shoe cutting and card burning
-- Game logic (`PlayPuntoBanco` function from `internal/punto_banco/punto_banco.go`) is separated from the UI, making it reusable for strategy simulations, but [the house always wins](https://paulvanderlaken.com/2018/01/10/baccarat-simulation-payoff/)
+- Infinity game (shoe updates automatically when it ends)
+- Game session statistics
+- Terminal-based UI
 
 ## Game Rules
 

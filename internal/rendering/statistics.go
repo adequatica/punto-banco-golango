@@ -8,6 +8,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+var (
+	resetStyle = lipgloss.NewStyle().UnsetForeground()
+	baseStyle  = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			Padding(1, 2)
+)
+
 // Removes the fractional part when it is .0
 func FormatFloat(value float64) string {
 	if value == float64(int(value)) {
@@ -16,10 +23,6 @@ func FormatFloat(value float64) string {
 
 	return fmt.Sprintf("%.1f", value)
 }
-
-var (
-	resetStyle = lipgloss.NewStyle().UnsetForeground()
-)
 
 func FormatUserWinsPercentage(value float64) string {
 	userWinsPercentage := fmt.Sprintf("%s%%", FormatFloat(value))
@@ -35,11 +38,7 @@ func FormatUserWinsPercentage(value float64) string {
 	return userWinsPercentage
 }
 
-var baseStyle = lipgloss.NewStyle().
-	Border(lipgloss.RoundedBorder()).
-	Padding(1, 2)
-
-const noGamesPlayedYet = "No games played yet"
+const noGamesPlayedYet = "No games played yet to show statistics"
 
 func RenderStatisticsTable(s *statistics.SessionStatistics) string {
 	if s == nil || s.TotalRounds == 0 {

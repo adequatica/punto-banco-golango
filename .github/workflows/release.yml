@@ -117,6 +117,8 @@ jobs:
             ### Features
             - 6 decks in the shoe
             - Casino-style shuffling with shoe cutting and card burning
+            - Infinity game (shoe updates automatically when it ends)
+            - Game session statistics
             - Terminal-based UI built with the Bubble Tea framework
           files: |
             punto-banco-linux-amd64

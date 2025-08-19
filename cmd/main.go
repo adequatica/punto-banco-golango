@@ -10,7 +10,7 @@ import (
 	"github.com/adequatica/punto-banco-golango/internal/statistics"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/bubbles/progress"
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -57,7 +57,7 @@ var defaultKeys = keyMap{
 		key.WithHelp("R", "— reset the game"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("q", "Q", "й", "Й", "ctrl+c"),
+		key.WithKeys("q", "Q", "й", "Й", "ctrl+c", "esc"),
 		key.WithHelp("Q/CTRL+C", "— quit"),
 	),
 }
@@ -83,11 +83,14 @@ type model struct {
 	selectedOption    string
 	keys              keyMap
 	help              help.Model
-	progress          progress.Model
-	progressPercent   float64
+	spinner           spinner.Model
+	spinnerStartTime  time.Time
 }
 
 func initialModel() model {
+	s := spinner.New()
+	s.Spinner = spinner.Dot
+
 	return model{
 		stateUI:           stateIsBetting,
 		stateGame:         puntobanco.GetNewGameResultState(),
@@ -99,12 +102,11 @@ func initialModel() model {
 		selectedOption:    "",
 		keys:              defaultKeys,
 		help:              help.New(),
-		progress:          progress.New(),
-		progressPercent:   0.0,
+		spinner:           s,
 	}
 }
 
-// Timer tick for progress animation
+// Timer tick for spinner animation
 type tickMsg time.Time
 
 func tick() tea.Cmd {
@@ -114,7 +116,7 @@ func tick() tea.Cmd {
 	}
 }
 
-var numberOfTicks = 50.0 // 50 ticks * 10ms = 500ms
+var spinnerTimeout = 500 * time.Millisecond // 500ms total duration
 
 func (m model) Init() tea.Cmd {
 	return nil
@@ -167,10 +169,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				// Store the selected betting choice
 				m.selectedOption = m.bettingOptions[m.cursor]
 
-				// Switch to progress state and start animation
+				// Switch to in progress state and start animation
 				m.stateUI = stateIsProgress
-				m.progressPercent = 0.0
-				return m, tick()
+				m.spinnerStartTime = time.Now()
+				return m, tea.Batch(
+					m.spinner.Tick,
+					tick(),
+				)
 
 			case stateIsAfterRound:
 				switch m.afterRoundOptions[m.cursor] {
@@ -186,6 +191,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.statistics.ResetStatistics()
 					m.cursor = 0
 					m.selectedOption = ""
+					m.spinnerStartTime = time.Time{} // Reset spinner timeout
 				case "Quit":
 					return m, tea.Quit
 				}
@@ -203,17 +209,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.showStatistics = !m.showStatistics
 		}
 
+	// Spinner tick
+	case spinner.TickMsg:
+		var cmd tea.Cmd
+		m.spinner, cmd = m.spinner.Update(msg)
+		return m, cmd
+
 	// The programm of the game works extremely fast!
 	// The progress animation emulates "thinking" of the program,
 	// so that it won't be boring to get results instantly.
 	case tickMsg:
 		if m.stateUI == stateIsProgress {
-			// Progress bar ends after numberOfTicks, each of which is 10ms
-			m.progressPercent += 100.0 / numberOfTicks
-
-			if m.progressPercent >= 100.0 {
-				// Ensure that progress bar doesn't exceed 100%
-				m.progressPercent = 100.0
+			// Check if timeout have passed
+			if time.Since(m.spinnerStartTime) >= spinnerTimeout {
 				// Animation complete, play the game and switch to after round state
 				gameResult, err := puntobanco.PlayPuntoBanco(m.stateGame.GetShoe())
 				if err != nil {
@@ -264,9 +272,8 @@ func (m model) View() string {
 		}
 
 	case stateIsProgress:
-		// Show progress bar
-		s += "Draw cards...\n\n"
-		s += fmt.Sprintf("%s\n", m.progress.ViewAs(m.progressPercent/100.0))
+		// Show spinner
+		s += fmt.Sprintf("%s Drawing cards...\n", m.spinner.View())
 
 	case stateIsAfterRound:
 		// Header
@@ -284,7 +291,7 @@ func (m model) View() string {
 			s += fmt.Sprintf("%s %s\n", cursor, choice)
 		}
 
-		// Show statistics only if enabled
+		// Show statistics if enabled
 		if m.showStatistics {
 			s += fmt.Sprintf("\n%s", rendering.RenderStatisticsTable(&m.statistics))
 		}

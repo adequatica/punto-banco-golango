@@ -345,7 +345,7 @@ func TestRenderDrawnCards(t *testing.T) {
 		want := "10♥ = 0"
 
 		if result != want {
-			t.Errorf("RenderDrawnCards() = %v shold be %v", result, want)
+			t.Errorf("RenderDrawnCards() = %v should be %v", result, want)
 		}
 	})
 
