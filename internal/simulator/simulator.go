@@ -9,22 +9,23 @@ import (
 )
 
 var (
-	Budget     = 1000.0
+	Bankroll   = 1000.0
 	MinimumBet = 10.0
 
 	MaxIntValue         = int(^uint(0) >> 1)
-	ProfitableThreshold = Budget * 1.01 // 101% of default budget
+	ProfitableThreshold = Bankroll * 1.01 // 101% of default bankroll
 )
 
 type StrategyType string
 
 const (
 	// Flat betting strategies
-	BetOnPunto    StrategyType = "Bet on Punto (player)"
-	BetOnBanco    StrategyType = "Bet on Banco (banker)"
-	BetOnEgalite  StrategyType = "Bet on Égalité (tie)"
-	BetOnLastHand StrategyType = "Bet on last hand"
-	BetOnRandom   StrategyType = "Bet on random"
+	BetOnPunto      StrategyType = "Bet on Punto (player)"
+	BetOnBanco      StrategyType = "Bet on Banco (banker)"
+	BetOnEgalite    StrategyType = "Bet on Égalité (tie)"
+	BetOnLastHand   StrategyType = "Bet on last hand"
+	BetOnLastHandPB StrategyType = "Bet on last hand PB"
+	BetOnRandom     StrategyType = "Bet on random"
 	// Progressive betting strategies
 	MartingaleOnPunto     StrategyType = "Martingale on Punto"
 	MartingaleOnBanco     StrategyType = "Martingale on Banco"
@@ -45,6 +46,7 @@ func GetStrategyOptions() []string {
 		string(BetOnBanco),
 		string(BetOnEgalite),
 		string(BetOnLastHand),
+		string(BetOnLastHandPB),
 		string(BetOnRandom),
 		// Progressive betting strategies
 		string(MartingaleOnPunto),
@@ -68,6 +70,15 @@ func GetRandomBetType() puntobanco.BetType {
 	}
 }
 
+func GetOnlyPuntoBanco(lastWinningHand puntobanco.BetType) puntobanco.BetType {
+	if lastWinningHand == puntobanco.EgaliteTie {
+		// Bet on Banco to maximize chance of winning
+		return puntobanco.BancoBanker
+	} else {
+		return lastWinningHand
+	}
+}
+
 func MakeStrategy(strategy StrategyType, state *SimulatorState) (puntobanco.BetType, float64) {
 	switch strategy {
 	case BetOnPunto:
@@ -78,6 +89,8 @@ func MakeStrategy(strategy StrategyType, state *SimulatorState) (puntobanco.BetT
 		return puntobanco.EgaliteTie, MinimumBet
 	case BetOnLastHand:
 		return state.LastWinningHand, MinimumBet
+	case BetOnLastHandPB:
+		return GetOnlyPuntoBanco(state.LastWinningHand), MinimumBet
 	case BetOnRandom:
 		return GetRandomBetType(), MinimumBet
 
@@ -147,32 +160,39 @@ func RunSimulator(strategy StrategyType) *SimulatorState {
 		state.RoundsPlayed++
 	}
 
+	// Track if the game ended profitably (when player can't bet any longer)
+	if state.CurrentBankroll > Bankroll {
+		state.GameEndedProfitably = true
+	}
+
 	return state
 }
 
 type MultipleSimulationsStats struct {
 	TotalSimulations int
 
-	AvgRoundsPlayed float64
-	MinRoundsPlayed int
-	MaxRoundsPlayed int
+	AvgRoundsPerGame float64
+	MinRoundsPlayed  int
+	MaxRoundsPlayed  int
 
-	AvgWins           float64
+	AvgWinsPerGames   float64
 	MinWins           int
 	MaxWins           int
 	WinRate           float64
 	GamesWithZeroWins int
 	ZeroWinsRate      float64
 
-	AvgMaxConsecutiveWins   float64
-	MaxConsecutiveWins      int
-	AvgMaxConsecutiveLosses float64
-	MaxConsecutiveLosses    int
+	AvgMaxWinsStreak float64
+	MaxWinsStreak    int
+	AvgMaxLossStreak float64
+	MaxLossStreak    int
 
-	AvgMaxBudgetReached       float64
-	MaxBudgetReacorded        float64
-	GamesWithProfitableBudget int
-	ProfitableBudgetRate      float64
+	AvgMaxBankrollReached       float64
+	MaxBankrollReacorded        float64
+	GamesWithProfitableBankroll int
+	ProfitableBankrollRate      float64
+	GamesWithProfitableEnd      int
+	ProfitableEndGamesRate      float64
 }
 
 func NewMultipleSimulationsStats(numSimulations int) MultipleSimulationsStats {
@@ -183,26 +203,28 @@ func NewMultipleSimulationsStats(numSimulations int) MultipleSimulationsStats {
 	return MultipleSimulationsStats{
 		TotalSimulations: numSimulations,
 
-		AvgRoundsPlayed: 0.0,
-		MinRoundsPlayed: MaxIntValue,
-		MaxRoundsPlayed: 0,
+		AvgRoundsPerGame: 0.0,
+		MinRoundsPlayed:  MaxIntValue,
+		MaxRoundsPlayed:  0,
 
-		AvgWins:           0.0,
+		AvgWinsPerGames:   0.0,
 		MinWins:           MaxIntValue,
 		MaxWins:           0,
 		WinRate:           0.0,
 		GamesWithZeroWins: 0,
 		ZeroWinsRate:      0.0,
 
-		AvgMaxConsecutiveWins:   0.0,
-		MaxConsecutiveWins:      0,
-		AvgMaxConsecutiveLosses: 0.0,
-		MaxConsecutiveLosses:    0,
+		AvgMaxWinsStreak: 0.0,
+		MaxWinsStreak:    0,
+		AvgMaxLossStreak: 0.0,
+		MaxLossStreak:    0,
 
-		AvgMaxBudgetReached:       0.0,
-		MaxBudgetReacorded:        Budget,
-		GamesWithProfitableBudget: 0,
-		ProfitableBudgetRate:      0.0,
+		AvgMaxBankrollReached:       0.0,
+		MaxBankrollReacorded:        Bankroll,
+		GamesWithProfitableBankroll: 0,
+		ProfitableBankrollRate:      0.0,
+		GamesWithProfitableEnd:      0,
+		ProfitableEndGamesRate:      0.0,
 	}
 }
 
@@ -216,14 +238,14 @@ func RunMultipleSimulations(strategy StrategyType, numSimulations int) MultipleS
 	totalRoundsPlayed := 0
 	totalWins := 0
 	totalWinRate := 0.0
-	totalMaxConsecutiveWins := 0
-	totalMaxConsecutiveLosses := 0
-	totalMaxBudgetReached := 0.0
+	totalMaxWinsStreak := 0
+	totalMaxLossStreak := 0
+	totalMaxBankrollReached := 0.0
 
 	for i := 0; i < numSimulations; i++ {
 		state := RunSimulator(strategy)
 
-		// Track games played stats
+		// Track played games stats
 		totalRoundsPlayed += state.RoundsPlayed
 		if state.RoundsPlayed < stats.MinRoundsPlayed {
 			stats.MinRoundsPlayed = state.RoundsPlayed
@@ -241,50 +263,56 @@ func RunMultipleSimulations(strategy StrategyType, numSimulations int) MultipleS
 			stats.MaxWins = state.Wins
 		}
 
-		// Track games with zero wins
-		if state.Wins == 0 {
-			stats.GamesWithZeroWins++
-		}
-
 		// Track win rate
 		if state.RoundsPlayed > 0 {
 			winRate := float64(state.Wins) / float64(state.RoundsPlayed) * 100
 			totalWinRate += winRate
 		}
 
-		// Track consecutive wins stats
-		totalMaxConsecutiveWins += state.MaxConsecutiveWins
-		if state.MaxConsecutiveWins > stats.MaxConsecutiveWins {
-			stats.MaxConsecutiveWins = state.MaxConsecutiveWins
+		// Track zero-wins games
+		if state.Wins == 0 {
+			stats.GamesWithZeroWins++
 		}
 
-		// Track consecutive losses stats
-		totalMaxConsecutiveLosses += state.MaxConsecutiveLosses
-		if state.MaxConsecutiveLosses > stats.MaxConsecutiveLosses {
-			stats.MaxConsecutiveLosses = state.MaxConsecutiveLosses
+		// Track wins streak stats
+		totalMaxWinsStreak += state.MaxWinsStreak
+		if state.MaxWinsStreak > stats.MaxWinsStreak {
+			stats.MaxWinsStreak = state.MaxWinsStreak
 		}
 
-		// Track max budget reached stats
-		totalMaxBudgetReached += state.MaxBudgetReached
-		if state.MaxBudgetReached > stats.MaxBudgetReacorded {
-			stats.MaxBudgetReacorded = state.MaxBudgetReached
+		// Track loss streak stats
+		totalMaxLossStreak += state.MaxLossStreak
+		if state.MaxLossStreak > stats.MaxLossStreak {
+			stats.MaxLossStreak = state.MaxLossStreak
 		}
 
-		// Track games with a profit budget during the game
-		if state.MaxBudgetReached > ProfitableThreshold {
-			stats.GamesWithProfitableBudget++
+		// Track max bankroll reached stats
+		totalMaxBankrollReached += state.MaxBankrollReached
+		if state.MaxBankrollReached > stats.MaxBankrollReacorded {
+			stats.MaxBankrollReacorded = state.MaxBankrollReached
+		}
+
+		// Track games with a profitable bankroll during the game
+		if state.MaxBankrollReached > ProfitableThreshold {
+			stats.GamesWithProfitableBankroll++
+		}
+
+		// Track games with profitable end (when player couldn't bet anymore)
+		if state.GameEndedProfitably {
+			stats.GamesWithProfitableEnd++
 		}
 	}
 
 	// Calculate averages
-	stats.AvgRoundsPlayed = float64(totalRoundsPlayed) / float64(numSimulations)
-	stats.AvgWins = float64(totalWins) / float64(numSimulations)
+	stats.AvgRoundsPerGame = float64(totalRoundsPlayed) / float64(numSimulations)
+	stats.AvgWinsPerGames = float64(totalWins) / float64(numSimulations)
 	stats.WinRate = totalWinRate / float64(numSimulations)
 	stats.ZeroWinsRate = float64(stats.GamesWithZeroWins) / float64(numSimulations) * 100
-	stats.AvgMaxConsecutiveWins = float64(totalMaxConsecutiveWins) / float64(numSimulations)
-	stats.AvgMaxConsecutiveLosses = float64(totalMaxConsecutiveLosses) / float64(numSimulations)
-	stats.AvgMaxBudgetReached = totalMaxBudgetReached / float64(numSimulations)
-	stats.ProfitableBudgetRate = float64(stats.GamesWithProfitableBudget) / float64(numSimulations) * 100
+	stats.AvgMaxWinsStreak = float64(totalMaxWinsStreak) / float64(numSimulations)
+	stats.AvgMaxLossStreak = float64(totalMaxLossStreak) / float64(numSimulations)
+	stats.AvgMaxBankrollReached = totalMaxBankrollReached / float64(numSimulations)
+	stats.ProfitableBankrollRate = float64(stats.GamesWithProfitableBankroll) / float64(numSimulations) * 100
+	stats.ProfitableEndGamesRate = float64(stats.GamesWithProfitableEnd) / float64(numSimulations) * 100
 
 	return stats
 }

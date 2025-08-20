@@ -38,7 +38,7 @@ func TestSimulatorStateProcessWin_FlatBettingStrategies(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			state := NewSimulatorState()
-			initialBudget := state.CurrentBudget
+			initialBankroll := state.CurrentBankroll
 			initialWins := state.Wins
 			initialBetAmount := state.BetAmount
 
@@ -50,21 +50,21 @@ func TestSimulatorStateProcessWin_FlatBettingStrategies(t *testing.T) {
 			}
 
 			expectedPayout := CalculatePayout(tt.betType, initialBetAmount)
-			expectedBudget := initialBudget + initialBetAmount + expectedPayout
-			if state.CurrentBudget != expectedBudget {
-				t.Errorf("budget should update: got %.2f, want %.2f", state.CurrentBudget, expectedBudget)
+			expectedBankroll := initialBankroll + initialBetAmount + expectedPayout
+			if state.CurrentBankroll != expectedBankroll {
+				t.Errorf("bankroll should update: got %.2f, want %.2f", state.CurrentBankroll, expectedBankroll)
 			}
-			if state.MaxBudgetReached != state.CurrentBudget {
-				t.Errorf("MaxBudgetReached should update: got %.2f, want %.2f", state.MaxBudgetReached, state.CurrentBudget)
+			if state.MaxBankrollReached != state.CurrentBankroll {
+				t.Errorf("MaxBankrollReached should update: got %.2f, want %.2f", state.MaxBankrollReached, state.CurrentBankroll)
 			}
-			if state.ConsecutiveLosses != 0 {
-				t.Errorf("ConsecutiveLosses should reset: got %d, want 0", state.ConsecutiveLosses)
+			if state.LossStreak != 0 {
+				t.Errorf("LossStreak should reset: got %d, want 0", state.LossStreak)
 			}
-			if state.ConsecutiveWins != 1 {
-				t.Errorf("ConsecutiveWins should increment: got %d, want 1", state.ConsecutiveWins)
+			if state.WinsStreak != 1 {
+				t.Errorf("WinsStreak should increment: got %d, want 1", state.WinsStreak)
 			}
-			if state.MaxConsecutiveWins != 1 {
-				t.Errorf("MaxConsecutiveWins  should increment: got %d, want 1", state.MaxConsecutiveWins)
+			if state.MaxWinsStreak != 1 {
+				t.Errorf("MaxWinsStreak  should increment: got %d, want 1", state.MaxWinsStreak)
 			}
 			if state.BetAmount != initialBetAmount {
 				t.Errorf("BetAmount should not change: got %.2f, want %.2f", state.BetAmount, initialBetAmount)
@@ -96,8 +96,8 @@ func TestSimulatorStateProcessWin_MartingaleStrategies(t *testing.T) {
 			state := NewSimulatorState()
 			initialWins := state.Wins
 
-			// Precondition of consecutive losses
-			state.ConsecutiveLosses = 3
+			// Precondition of loss streak
+			state.LossStreak = 3
 			state.BetAmount = state.BaseBetAmount * 8 // After 3 losses, bet would be 8x base
 
 			state.BettingOn = tt.betType
@@ -106,11 +106,11 @@ func TestSimulatorStateProcessWin_MartingaleStrategies(t *testing.T) {
 			if state.Wins != initialWins+1 {
 				t.Errorf("wins should increment: got %d, want %d", state.Wins, initialWins+1)
 			}
-			if state.ConsecutiveLosses != 0 {
-				t.Errorf("ConsecutiveLosses should reset: got %d, want 0", state.ConsecutiveLosses)
+			if state.LossStreak != 0 {
+				t.Errorf("LossStreak should reset: got %d, want 0", state.LossStreak)
 			}
-			if state.ConsecutiveWins != 1 {
-				t.Errorf("ConsecutiveWins should increment: got %d, want 1", state.ConsecutiveWins)
+			if state.WinsStreak != 1 {
+				t.Errorf("WinsStreak should increment: got %d, want 1", state.WinsStreak)
 			}
 			if state.BetAmount != state.BaseBetAmount {
 				t.Errorf("BetAmount should reset: got %.2f, want %.2f", state.BetAmount, state.BaseBetAmount)
@@ -153,11 +153,11 @@ func TestSimulatorStateProcessWin_FibonacciStrategies(t *testing.T) {
 			if state.Wins != initialWins+1 {
 				t.Errorf("wins should increment: got %d, want %d", state.Wins, initialWins+1)
 			}
-			if state.ConsecutiveLosses != 0 {
-				t.Errorf("ConsecutiveLosses should reset: got %d, want 0", state.ConsecutiveLosses)
+			if state.LossStreak != 0 {
+				t.Errorf("LossStreak should reset: got %d, want 0", state.LossStreak)
 			}
-			if state.ConsecutiveWins != 1 {
-				t.Errorf("ConsecutiveWins should increment: got %d, want 1", state.ConsecutiveWins)
+			if state.WinsStreak != 1 {
+				t.Errorf("WinsStreak should increment: got %d, want 1", state.WinsStreak)
 			}
 			if state.FibonacciSequenceIndex != 3 {
 				t.Errorf("Fibonacci sequence should move back by 2 after win: got %d, want 3", state.FibonacciSequenceIndex)
@@ -245,11 +245,11 @@ func TestSimulatorStateProcessWin_ParoliStrategies(t *testing.T) {
 			if state.Wins != initialWins+1 {
 				t.Errorf("wins should increment: got %d, want %d", state.Wins, initialWins+1)
 			}
-			if state.ConsecutiveLosses != 0 {
-				t.Errorf("ConsecutiveLosses should reset: got %d, want 0", state.ConsecutiveLosses)
+			if state.LossStreak != 0 {
+				t.Errorf("LossStreak should reset: got %d, want 0", state.LossStreak)
 			}
-			if state.ConsecutiveWins != 1 {
-				t.Errorf("ConsecutiveWins should increment: got %d, want 1", state.ConsecutiveWins)
+			if state.WinsStreak != 1 {
+				t.Errorf("WinsStreak should increment: got %d, want 1", state.WinsStreak)
 			}
 
 			// Second Paroli win - double the bet
@@ -324,11 +324,11 @@ func TestSimulatorStateProcessWin_DAlembertStrategies(t *testing.T) {
 			if state.Wins != initialWins+1 {
 				t.Errorf("wins should increment: got %d, want %d", state.Wins, initialWins+1)
 			}
-			if state.ConsecutiveLosses != 0 {
-				t.Errorf("ConsecutiveLosses should reset: got %d, want 0", state.ConsecutiveLosses)
+			if state.LossStreak != 0 {
+				t.Errorf("LossStreak should reset: got %d, want 0", state.LossStreak)
 			}
-			if state.ConsecutiveWins != 1 {
-				t.Errorf("ConsecutiveWins should increment: got %d, want 1", state.ConsecutiveWins)
+			if state.WinsStreak != 1 {
+				t.Errorf("WinsStreak should increment: got %d, want 1", state.WinsStreak)
 			}
 			if state.DAlembertLevel != 2 {
 				t.Errorf("D'Alembert level should decrease: got %d, want 2", state.DAlembertLevel)
@@ -388,11 +388,11 @@ func TestSimulatorStateProcessWin_OneThreeTwoSixStrategies(t *testing.T) {
 			if state.Wins != initialWins+1 {
 				t.Errorf("wins should increment: got %d, want %d", state.Wins, initialWins+1)
 			}
-			if state.ConsecutiveLosses != 0 {
-				t.Errorf("ConsecutiveLosses should reset: got %d, want 0", state.ConsecutiveLosses)
+			if state.LossStreak != 0 {
+				t.Errorf("LossStreak should reset: got %d, want 0", state.LossStreak)
 			}
-			if state.ConsecutiveWins != 1 {
-				t.Errorf("ConsecutiveWins should increment: got %d, want 1", state.ConsecutiveWins)
+			if state.WinsStreak != 1 {
+				t.Errorf("WinsStreak should increment: got %d, want 1", state.WinsStreak)
 			}
 			if state.OneThreeTwoSixSequenceIndex != 1 {
 				t.Errorf("Sequence index should be 1: got %d", state.OneThreeTwoSixSequenceIndex)

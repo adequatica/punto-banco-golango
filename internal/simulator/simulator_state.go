@@ -7,19 +7,20 @@ import (
 var ParoliMaxLevel = 3
 
 type SimulatorState struct {
-	CurrentBudget    float64
-	MaxBudgetReached float64
-	LastWinningHand  puntobanco.BetType
-	BettingOn        puntobanco.BetType
-	RoundsPlayed     int
-	Wins             int
-	BetAmount        float64
+	CurrentBankroll     float64
+	MaxBankrollReached  float64
+	LastWinningHand     puntobanco.BetType
+	BettingOn           puntobanco.BetType
+	RoundsPlayed        int
+	Wins                int
+	BetAmount           float64
+	GameEndedProfitably bool
 	// Martingale-specific fields
-	BaseBetAmount        float64
-	ConsecutiveLosses    int
-	ConsecutiveWins      int
-	MaxConsecutiveLosses int
-	MaxConsecutiveWins   int
+	BaseBetAmount float64
+	LossStreak    int
+	WinsStreak    int
+	MaxLossStreak int
+	MaxWinsStreak int
 	// Fibonacci-specific fields
 	FibonacciSequenceIndex int     // Current position in Fibonacci sequence (0=based)
 	FibonacciProfit        float64 // Current profit in wager units (1 unit = MinimumBet)
@@ -36,19 +37,20 @@ type SimulatorState struct {
 
 func NewSimulatorState() *SimulatorState {
 	return &SimulatorState{
-		CurrentBudget:    Budget,
-		MaxBudgetReached: Budget,
-		LastWinningHand:  puntobanco.PuntoPlayer,
-		BettingOn:        puntobanco.PuntoPlayer,
-		RoundsPlayed:     0,
-		Wins:             0,
-		BetAmount:        MinimumBet,
+		CurrentBankroll:     Bankroll,
+		MaxBankrollReached:  Bankroll,
+		LastWinningHand:     puntobanco.PuntoPlayer,
+		BettingOn:           puntobanco.PuntoPlayer,
+		RoundsPlayed:        0,
+		Wins:                0,
+		BetAmount:           MinimumBet,
+		GameEndedProfitably: false,
 		// Martingale-specific fields
-		BaseBetAmount:        MinimumBet,
-		ConsecutiveLosses:    0,
-		ConsecutiveWins:      0,
-		MaxConsecutiveLosses: 0,
-		MaxConsecutiveWins:   0,
+		BaseBetAmount: MinimumBet,
+		LossStreak:    0,
+		WinsStreak:    0,
+		MaxLossStreak: 0,
+		MaxWinsStreak: 0,
 		// Fibonacci-specific fields
 		FibonacciSequenceIndex: 0,
 		FibonacciProfit:        0.0,
@@ -118,29 +120,29 @@ func CalculatePayout(betType puntobanco.BetType, betAmount float64) float64 {
 }
 
 func (s *SimulatorState) CanPlaceBet() bool {
-	return s.CurrentBudget >= s.BetAmount
+	return s.CurrentBankroll >= s.BetAmount
 }
 
 func (s *SimulatorState) PlaceBet() {
-	s.CurrentBudget -= s.BetAmount
+	s.CurrentBankroll -= s.BetAmount
 }
 
 func (s *SimulatorState) ProcessWin(strategy StrategyType) {
 	s.Wins++
 
 	payoutAmount := CalculatePayout(s.BettingOn, s.BetAmount)
-	s.CurrentBudget += s.BetAmount + payoutAmount
-	// Track maximum budget reached
-	if s.CurrentBudget > s.MaxBudgetReached {
-		s.MaxBudgetReached = s.CurrentBudget
+	s.CurrentBankroll += s.BetAmount + payoutAmount
+	// Track maximum bankroll reached
+	if s.CurrentBankroll > s.MaxBankrollReached {
+		s.MaxBankrollReached = s.CurrentBankroll
 	}
 
-	// Martingale strategy: reset consecutive losses and return to base bet.
-	s.ConsecutiveLosses = 0
-	s.ConsecutiveWins++
-	// Track maximum consecutive wins
-	if s.ConsecutiveWins > s.MaxConsecutiveWins {
-		s.MaxConsecutiveWins = s.ConsecutiveWins
+	// Martingale strategy: reset loss streak and return to base bet.
+	s.LossStreak = 0
+	s.WinsStreak++
+	// Track maximum wins streak
+	if s.WinsStreak > s.MaxWinsStreak {
+		s.MaxWinsStreak = s.WinsStreak
 	}
 	// If your bet wins, your stake remains the same for the next round, and you return to your original bet amount.
 	// This means you continue betting the same amount.
@@ -228,12 +230,12 @@ func (s *SimulatorState) ProcessWin(strategy StrategyType) {
 }
 
 func (s *SimulatorState) ProcessLoss(strategy StrategyType) {
-	// Martingale strategy: increment consecutive losses and double the bet for next round.
-	s.ConsecutiveLosses++
-	s.ConsecutiveWins = 0
-	// Track maximum consecutive losses
-	if s.ConsecutiveLosses > s.MaxConsecutiveLosses {
-		s.MaxConsecutiveLosses = s.ConsecutiveLosses
+	// Martingale strategy: increment loss streakand double the bet for next round.
+	s.LossStreak++
+	s.WinsStreak = 0
+	// Track maximum loss streak
+	if s.LossStreak > s.MaxLossStreak {
+		s.MaxLossStreak = s.LossStreak
 	}
 	// If your bet loses, you double your bet size for the next hand.
 	// You continue doubling your bet after each loss until you win a hand.

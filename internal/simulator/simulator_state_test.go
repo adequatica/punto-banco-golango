@@ -119,48 +119,48 @@ func TestCalculatePayout(t *testing.T) {
 
 func TestSimulatorStateCanPlaceBet(t *testing.T) {
 	tests := []struct {
-		name          string
-		currentBudget float64
-		betAmount     float64
-		want          bool
+		name            string
+		currentBankroll float64
+		betAmount       float64
+		want            bool
 	}{
 		{
-			name:          "can place bet when budget equals bet amount",
-			currentBudget: 100.0,
-			betAmount:     100.0,
-			want:          true,
+			name:            "can place bet when bankroll equals bet amount",
+			currentBankroll: 100.0,
+			betAmount:       100.0,
+			want:            true,
 		},
 		{
-			name:          "can place bet when budget greater than bet amount",
-			currentBudget: 101.0,
-			betAmount:     100.0,
-			want:          true,
+			name:            "can place bet when bankroll greater than bet amount",
+			currentBankroll: 101.0,
+			betAmount:       100.0,
+			want:            true,
 		},
 		{
-			name:          "cannot place bet when budget less than bet amount",
-			currentBudget: 1.0,
-			betAmount:     10.0,
-			want:          false,
+			name:            "cannot place bet when bankroll less than bet amount",
+			currentBankroll: 1.0,
+			betAmount:       10.0,
+			want:            false,
 		},
 		{
-			name:          "cannot place bet when budget is zero",
-			currentBudget: 0.0,
-			betAmount:     10.0,
-			want:          false,
+			name:            "cannot place bet when bankroll is zero",
+			currentBankroll: 0.0,
+			betAmount:       10.0,
+			want:            false,
 		},
 		{
-			name:          "can place bet when bet amount is zero",
-			currentBudget: 1.0,
-			betAmount:     0.0,
-			want:          true,
+			name:            "can place bet when bet amount is zero",
+			currentBankroll: 1.0,
+			betAmount:       0.0,
+			want:            true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			state := &SimulatorState{
-				CurrentBudget: tt.currentBudget,
-				BetAmount:     tt.betAmount,
+				CurrentBankroll: tt.currentBankroll,
+				BetAmount:       tt.betAmount,
 			}
 			result := state.CanPlaceBet()
 			if result != tt.want {
@@ -172,38 +172,38 @@ func TestSimulatorStateCanPlaceBet(t *testing.T) {
 
 func TestSimulatorStatePlaceBet(t *testing.T) {
 	tests := []struct {
-		name          string
-		initialBudget float64
-		betAmount     float64
-		wantBudget    float64
+		name            string
+		initialBankroll float64
+		betAmount       float64
+		wantBankroll    float64
 	}{
 		{
-			name:          "place bet reduces budget by bet amount",
-			initialBudget: 1000.0,
-			betAmount:     10.0,
-			wantBudget:    990.0,
+			name:            "place bet reduces bankroll by bet amount",
+			initialBankroll: 1000.0,
+			betAmount:       10.0,
+			wantBankroll:    990.0,
 		},
 		{
-			name:          "place bet with zero bet amount",
-			initialBudget: 1000.0,
-			betAmount:     0.0,
-			wantBudget:    1000.0,
+			name:            "place bet with zero bet amount",
+			initialBankroll: 1000.0,
+			betAmount:       0.0,
+			wantBankroll:    1000.0,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			state := &SimulatorState{
-				CurrentBudget: tt.initialBudget,
-				BetAmount:     tt.betAmount,
+				CurrentBankroll: tt.initialBankroll,
+				BetAmount:       tt.betAmount,
 			}
 
-			initialBudget := state.CurrentBudget
+			initialBankroll := state.CurrentBankroll
 			state.PlaceBet()
 
-			if state.CurrentBudget != tt.wantBudget {
-				t.Errorf("PlaceBet() changed budget from %.2f to %.2f, want %.2f",
-					initialBudget, state.CurrentBudget, tt.wantBudget)
+			if state.CurrentBankroll != tt.wantBankroll {
+				t.Errorf("PlaceBet() changed bankroll from %.2f to %.2f, want %.2f",
+					initialBankroll, state.CurrentBankroll, tt.wantBankroll)
 			}
 		})
 	}

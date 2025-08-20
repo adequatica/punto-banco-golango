@@ -9,8 +9,8 @@ import (
 func TestGetStrategyOptions(t *testing.T) {
 	want := GetStrategyOptions()
 
-	if len(want) != 15 {
-		t.Errorf("Strategy options of length %d should be 15", len(want))
+	if len(want) != 16 {
+		t.Errorf("Strategy options of length %d should be 16", len(want))
 	}
 
 	if len(want) > 0 && want[0] != "Bet on Punto (player)" {
@@ -23,6 +23,39 @@ func TestGetRandomBetType(t *testing.T) {
 
 	if result != puntobanco.PuntoPlayer && result != puntobanco.BancoBanker {
 		t.Errorf("GetRandomBetType() returned unexpected value: %s", result)
+	}
+}
+
+func TestGetOnlyPuntoBanco(t *testing.T) {
+	tests := []struct {
+		name            string
+		lastWinningHand puntobanco.BetType
+		want            puntobanco.BetType
+	}{
+		{
+			name:            "if last winning hand is PuntoPlayer, return PuntoPlayer",
+			lastWinningHand: puntobanco.PuntoPlayer,
+			want:            puntobanco.PuntoPlayer,
+		},
+		{
+			name:            "if last winning hand is BancoBanker, return BancoBanker",
+			lastWinningHand: puntobanco.BancoBanker,
+			want:            puntobanco.BancoBanker,
+		},
+		{
+			name:            "if last winning hand is EgaliteTie, return BancoBanker",
+			lastWinningHand: puntobanco.EgaliteTie,
+			want:            puntobanco.BancoBanker,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := GetOnlyPuntoBanco(tt.lastWinningHand)
+			if got != tt.want {
+				t.Errorf("GetOnlyPuntoBanco(%v) = %v, want %v", tt.lastWinningHand, got, tt.want)
+			}
+		})
 	}
 }
 
@@ -60,6 +93,24 @@ func TestMakeStrategy(t *testing.T) {
 			strategy: BetOnLastHand,
 			state: &SimulatorState{
 				LastWinningHand: puntobanco.BancoBanker,
+			},
+			wantBetType:   puntobanco.BancoBanker,
+			wantBetAmount: MinimumBet,
+		},
+		{
+			name:     "Bet on last hand PB returns last winning hand with minimum bet",
+			strategy: BetOnLastHand,
+			state: &SimulatorState{
+				LastWinningHand: puntobanco.PuntoPlayer,
+			},
+			wantBetType:   puntobanco.PuntoPlayer,
+			wantBetAmount: MinimumBet,
+		},
+		{
+			name:     "Bet on last hand PB returns BancoBanker with minimum bet in case of EgaliteTie",
+			strategy: BetOnLastHandPB,
+			state: &SimulatorState{
+				LastWinningHand: puntobanco.EgaliteTie,
 			},
 			wantBetType:   puntobanco.BancoBanker,
 			wantBetAmount: MinimumBet,
@@ -231,9 +282,9 @@ func TestNewMultipleSimulationsStats(t *testing.T) {
 			}
 
 			// Default values
-			if result.AvgRoundsPlayed != 0.0 {
-				t.Errorf("AvgRoundsPlayed = %.2f should be 0.0",
-					result.AvgRoundsPlayed)
+			if result.AvgRoundsPerGame != 0.0 {
+				t.Errorf("AvgRoundsPerGame = %.2f should be 0.0",
+					result.AvgRoundsPerGame)
 			}
 			if result.MinRoundsPlayed != MaxIntValue {
 				t.Errorf("MinRoundsPlayed = %d should be %d",
@@ -243,17 +294,17 @@ func TestNewMultipleSimulationsStats(t *testing.T) {
 				t.Errorf("MaxRoundsPlayed = %d should be 0",
 					result.MaxRoundsPlayed)
 			}
-			if result.MaxConsecutiveLosses != 0 {
-				t.Errorf("MaxConsecutiveLosses = %d should be 0",
-					result.MaxConsecutiveLosses)
+			if result.MaxLossStreak != 0 {
+				t.Errorf("MaxLossStreak = %d should be 0",
+					result.MaxLossStreak)
 			}
-			if result.MaxConsecutiveWins != 0 {
-				t.Errorf("MaxConsecutiveWins = %d should be 0",
-					result.MaxConsecutiveWins)
+			if result.MaxWinsStreak != 0 {
+				t.Errorf("MaxWinsStreak = %d should be 0",
+					result.MaxWinsStreak)
 			}
-			if result.AvgWins != 0.0 {
-				t.Errorf("AvgWins = %.2f should be 0.0",
-					result.AvgWins)
+			if result.AvgWinsPerGames != 0.0 {
+				t.Errorf("AvgWinsPerGames = %.2f should be 0.0",
+					result.AvgWinsPerGames)
 			}
 			if result.MinWins != MaxIntValue {
 				t.Errorf("MinWins = %d should be %d",
@@ -275,37 +326,45 @@ func TestNewMultipleSimulationsStats(t *testing.T) {
 				t.Errorf("ZeroWinsRate = %.2f should be 0.0",
 					result.ZeroWinsRate)
 			}
-			if result.AvgMaxConsecutiveWins != 0.0 {
-				t.Errorf("AvgMaxConsecutiveWins = %.2f should be 0.0",
-					result.AvgMaxConsecutiveWins)
+			if result.AvgMaxWinsStreak != 0.0 {
+				t.Errorf("AvgMaxWinsStreak = %.2f should be 0.0",
+					result.AvgMaxWinsStreak)
 			}
-			if result.MaxConsecutiveWins != 0 {
-				t.Errorf("MaxConsecutiveWins = %d should be 0",
-					result.MaxConsecutiveWins)
+			if result.MaxWinsStreak != 0 {
+				t.Errorf("MaxWinsStreak = %d should be 0",
+					result.MaxWinsStreak)
 			}
-			if result.AvgMaxConsecutiveLosses != 0.0 {
-				t.Errorf("AvgMaxConsecutiveLosses = %.2f should be 0.0",
-					result.AvgMaxConsecutiveLosses)
+			if result.AvgMaxLossStreak != 0.0 {
+				t.Errorf("AvgMaxLossStreak = %.2f should be 0.0",
+					result.AvgMaxLossStreak)
 			}
-			if result.MaxConsecutiveLosses != 0 {
-				t.Errorf("MaxConsecutiveLosses = %d should be 0",
-					result.MaxConsecutiveLosses)
+			if result.MaxLossStreak != 0 {
+				t.Errorf("MaxLossStreak = %d should be 0",
+					result.MaxLossStreak)
 			}
-			if result.AvgMaxBudgetReached != 0.0 {
-				t.Errorf("AvgMaxBudgetReached = %.2f should be 0.0",
-					result.AvgMaxBudgetReached)
+			if result.AvgMaxBankrollReached != 0.0 {
+				t.Errorf("AvgMaxBankrollReached = %.2f should be 0.0",
+					result.AvgMaxBankrollReached)
 			}
-			if result.MaxBudgetReacorded != Budget {
-				t.Errorf("MaxBudgetReacorded = %.2f should be  %.2f",
-					result.MaxBudgetReacorded, Budget)
+			if result.MaxBankrollReacorded != Bankroll {
+				t.Errorf("MaxBankrollReacorded = %.2f should be  %.2f",
+					result.MaxBankrollReacorded, Bankroll)
 			}
-			if result.GamesWithProfitableBudget != 0 {
-				t.Errorf("GamesWithProfitableBudget = %d should be 0",
-					result.GamesWithProfitableBudget)
+			if result.GamesWithProfitableBankroll != 0 {
+				t.Errorf("GamesWithProfitableBankroll = %d should be 0",
+					result.GamesWithProfitableBankroll)
 			}
-			if result.ProfitableBudgetRate != 0.0 {
-				t.Errorf("ProfitableBudgetRate = %.2f should be 0.0",
-					result.ProfitableBudgetRate)
+			if result.ProfitableBankrollRate != 0.0 {
+				t.Errorf("ProfitableBankrollRate = %.2f should be 0.0",
+					result.ProfitableBankrollRate)
+			}
+			if result.GamesWithProfitableEnd != 0 {
+				t.Errorf("GamesWithProfitableEnd = %d should be 0",
+					result.GamesWithProfitableEnd)
+			}
+			if result.ProfitableEndGamesRate != 0.0 {
+				t.Errorf("ProfitableEndGamesRate = %.2f should be 0.0",
+					result.ProfitableEndGamesRate)
 			}
 		})
 	}
@@ -317,7 +376,7 @@ func TestRunMultipleSimulations(t *testing.T) {
 	if result.TotalSimulations != numberOfTestSimulations {
 		t.Fatal("should run multiple simulations")
 	}
-	if result.AvgRoundsPlayed <= 0 {
+	if result.AvgRoundsPerGame <= 0 {
 		t.Fatal("multiple simulations should play average at least one round")
 	}
 	if result.MinRoundsPlayed <= 0 {

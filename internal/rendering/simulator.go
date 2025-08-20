@@ -56,35 +56,35 @@ func RenderSimulatorTable(stats *simulator.MultipleSimulationsStats) string {
 	}
 
 	columns := []table.Column{
-		{Title: "Statistics category", Width: 34},
-		{Title: "Value", Width: 12},
+		{Title: "Statistics category", Width: 36},
+		{Title: "Value", Width: 10},
 	}
 
 	rows := []table.Row{
 		// Games played statistics
-		{"Rounds played, average per game", FormatFloat(stats.AvgRoundsPlayed)},
-		{"Rounds played, min per game", fmt.Sprintf("%d", stats.MinRoundsPlayed)},
-		{"Rounds played, max per game", fmt.Sprintf("%d", stats.MaxRoundsPlayed)},
+		{"Mean rounds per game", FormatFloat(stats.AvgRoundsPerGame)},
+		{"Minimum played rounds per game", fmt.Sprintf("%d", stats.MinRoundsPlayed)},
+		{"Maximum played rounds per game", fmt.Sprintf("%d", stats.MaxRoundsPlayed)},
 		{"", ""},
 		// Wins statistics
-		{"Wins, average per game", FormatFloat(stats.AvgWins)},
-		{"Wins, min per game", fmt.Sprintf("%d", stats.MinWins)},
-		{"Wins, max per game", fmt.Sprintf("%d", stats.MaxWins)},
+		{"Mean wins per game", FormatFloat(stats.AvgWinsPerGames)},
+		{"Minimum wins per game", fmt.Sprintf("%d", stats.MinWins)},
+		{"Maximum wins per game", fmt.Sprintf("%d", stats.MaxWins)},
 		// Win rate statistics
 		{"Win rate", FormatPercentage(stats.WinRate)},
-		{"Zero wins games rate", FormatPercentage(stats.ZeroWinsRate)},
+		{"Rate of zero-wins games", FormatPercentage(stats.ZeroWinsRate)},
 		{"", ""},
-		// Consecutive wins statistics
-		{"Consecutive wins, average", FormatFloat(stats.AvgMaxConsecutiveWins)},
-		{"Maximum consecutive wins", fmt.Sprintf("%d", stats.MaxConsecutiveWins)},
-		// Consecutive losses statistics
-		{"Consecutive losses, average", FormatFloat(stats.AvgMaxConsecutiveLosses)},
-		{"Maximum consecutive losses", fmt.Sprintf("%d", stats.MaxConsecutiveLosses)},
+		// Streaks statistics
+		{"Mean winning streak", FormatFloat(stats.AvgMaxWinsStreak)},
+		{"Maximum winning streak", fmt.Sprintf("%d", stats.MaxWinsStreak)},
+		{"Mean losing streak", FormatFloat(stats.AvgMaxLossStreak)},
+		{"Maximum losing streak", fmt.Sprintf("%d", stats.MaxLossStreak)},
 		{"", ""},
-		// Budget statistics
-		{"Maximum budget reached, average", FormatCurrency(stats.AvgMaxBudgetReached)},
-		{"Maximum recorded budget", FormatCurrency(stats.MaxBudgetReacorded)},
-		{"Profitable games", FormatPercentage(stats.ProfitableBudgetRate)},
+		// Bankroll statistics
+		{"Mean peak bankroll per game", FormatCurrency(stats.AvgMaxBankrollReached)},
+		{"Maximum recorded bankroll", FormatCurrency(stats.MaxBankrollReacorded)},
+		{"Profitable games", FormatPercentage(stats.ProfitableBankrollRate)},
+		{"Profitably ended games", FormatPercentage(stats.ProfitableEndGamesRate)},
 	}
 
 	t := table.New(

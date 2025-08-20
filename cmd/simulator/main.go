@@ -17,7 +17,8 @@ import (
 
 var (
 	defaultNumberOfSimulations = 10000
-	maxNumberOfSimulations     = 999999 // Just to prevent too long calculations
+	// Limit of 1M simulations needs just to prevent too long calculations in case of input mistake
+	maxNumberOfSimulations = 999999 // This number of simulations take ~ 25 minutes depends on choosen strategy
 )
 
 type keyMap struct {
