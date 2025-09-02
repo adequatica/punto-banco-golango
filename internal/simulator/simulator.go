@@ -23,16 +23,16 @@ const (
 	BetOnPunto      StrategyType = "Bet on Punto (player)"
 	BetOnBanco      StrategyType = "Bet on Banco (banker)"
 	BetOnEgalite    StrategyType = "Bet on Égalité (tie)"
-	BetOnLastHand   StrategyType = "Bet on last hand"
-	BetOnLastHandPB StrategyType = "Bet on last hand PB"
-	BetOnRandom     StrategyType = "Bet on random"
+	BetOnLastHand   StrategyType = "Bet on Last Hand"
+	BetOnLastHandPB StrategyType = "Bet on Last Hand PB"
+	BetOnRandom     StrategyType = "Bet on Random PB"
 	// Progressive betting strategies
 	MartingaleOnPunto     StrategyType = "Martingale on Punto"
 	MartingaleOnBanco     StrategyType = "Martingale on Banco"
-	FibonacciOnPunto      StrategyType = "Fibonacci on Punto"
-	FibonacciOnBanco      StrategyType = "Fibonacci on Banco"
 	ParoliOnPunto         StrategyType = "Paroli on Punto"
 	ParoliOnBanco         StrategyType = "Paroli on Banco"
+	FibonacciOnPunto      StrategyType = "Fibonacci on Punto"
+	FibonacciOnBanco      StrategyType = "Fibonacci on Banco"
 	DAlembertOnPunto      StrategyType = "D'Alembert on Punto"
 	DAlembertOnBanco      StrategyType = "D'Alembert on Banco"
 	OneThreeTwoSixOnPunto StrategyType = "1-3-2-6 on Punto"
@@ -51,10 +51,10 @@ func GetStrategyOptions() []string {
 		// Progressive betting strategies
 		string(MartingaleOnPunto),
 		string(MartingaleOnBanco),
-		string(FibonacciOnPunto),
-		string(FibonacciOnBanco),
 		string(ParoliOnPunto),
 		string(ParoliOnBanco),
+		string(FibonacciOnPunto),
+		string(FibonacciOnBanco),
 		string(DAlembertOnPunto),
 		string(DAlembertOnBanco),
 		string(OneThreeTwoSixOnPunto),
@@ -99,14 +99,14 @@ func MakeStrategy(strategy StrategyType, state *SimulatorState) (puntobanco.BetT
 	case MartingaleOnBanco:
 		return puntobanco.BancoBanker, state.BetAmount
 
-	case FibonacciOnPunto:
-		return puntobanco.PuntoPlayer, state.BetAmount
-	case FibonacciOnBanco:
-		return puntobanco.BancoBanker, state.BetAmount
-
 	case ParoliOnPunto:
 		return puntobanco.PuntoPlayer, state.BetAmount
 	case ParoliOnBanco:
+		return puntobanco.BancoBanker, state.BetAmount
+
+	case FibonacciOnPunto:
+		return puntobanco.PuntoPlayer, state.BetAmount
+	case FibonacciOnBanco:
 		return puntobanco.BancoBanker, state.BetAmount
 
 	case DAlembertOnPunto:
@@ -161,7 +161,7 @@ func RunSimulator(strategy StrategyType) *SimulatorState {
 	}
 
 	// Track if the game ended profitably (when player can't bet any longer)
-	if state.CurrentBankroll > Bankroll {
+	if state.CurrentBankroll > ProfitableThreshold {
 		state.GameEndedProfitably = true
 	}
 

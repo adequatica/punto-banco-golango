@@ -51,13 +51,13 @@ func NewSimulatorState() *SimulatorState {
 		WinsStreak:    0,
 		MaxLossStreak: 0,
 		MaxWinsStreak: 0,
-		// Fibonacci-specific fields
-		FibonacciSequenceIndex: 0,
-		FibonacciProfit:        0.0,
 		// Paroli-specific fields
 		IsInParoliProgression:  false,
 		ParoliProgressionLevel: 0,
 		ParoliGoal:             ParoliMaxLevel,
+		// Fibonacci-specific fields
+		FibonacciSequenceIndex: 0,
+		FibonacciProfit:        0.0,
 		// D'Alembert-specific fields
 		DAlembertUnitSize: MinimumBet,
 		DAlembertLevel:    0,
@@ -66,7 +66,7 @@ func NewSimulatorState() *SimulatorState {
 	}
 }
 
-// Fibonacci sequence 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, ...
+// Fibonacci sequence 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...
 func GetFibonacciValue(index int) int {
 	if index <= 0 {
 		return 1
@@ -146,9 +146,31 @@ func (s *SimulatorState) ProcessWin(strategy StrategyType) {
 	}
 	// If your bet wins, your stake remains the same for the next round, and you return to your original bet amount.
 	// This means you continue betting the same amount.
-	// Once you win a hand, you return to your original or opening bet unit and start the process over again
+	// Once you win a hand, you return to your original bet unit and start the process over again
 	if strategy == MartingaleOnPunto || strategy == MartingaleOnBanco {
 		s.BetAmount = s.BaseBetAmount
+	}
+
+	// Paroli strategy: handle progression after a win.
+	if strategy == ParoliOnPunto || strategy == ParoliOnBanco {
+		if !s.IsInParoliProgression {
+			// Start Paroli progression with base bet
+			s.IsInParoliProgression = true
+			s.ParoliProgressionLevel = 1
+			s.BetAmount = s.BaseBetAmount
+		} else {
+			// Continue progression
+			s.ParoliProgressionLevel++
+			if s.ParoliProgressionLevel <= s.ParoliGoal {
+				// Double the bet for next round
+				s.BetAmount = s.BetAmount * 2
+			} else {
+				// Goal reached: reset to base bet and end progression
+				s.BetAmount = s.BaseBetAmount
+				s.IsInParoliProgression = false
+				s.ParoliProgressionLevel = 0
+			}
+		}
 	}
 
 	// Fibonacci strategy: move back two places in sequence after a win.
@@ -173,28 +195,6 @@ func (s *SimulatorState) ProcessWin(strategy StrategyType) {
 			s.FibonacciSequenceIndex = 0
 			s.FibonacciProfit = 0.0
 			s.BetAmount = MinimumBet
-		}
-	}
-
-	// Paroli strategy: handle progression after a win.
-	if strategy == ParoliOnPunto || strategy == ParoliOnBanco {
-		if !s.IsInParoliProgression {
-			// Start Paroli progression with base bet
-			s.IsInParoliProgression = true
-			s.ParoliProgressionLevel = 1
-			s.BetAmount = s.BaseBetAmount
-		} else {
-			// Continue progression
-			s.ParoliProgressionLevel++
-			if s.ParoliProgressionLevel <= s.ParoliGoal {
-				// Double the bet for next round
-				s.BetAmount = s.BetAmount * 2
-			} else {
-				// Goal reached: reset to base bet and end progression
-				s.BetAmount = s.BaseBetAmount
-				s.IsInParoliProgression = false
-				s.ParoliProgressionLevel = 0
-			}
 		}
 	}
 
@@ -243,6 +243,13 @@ func (s *SimulatorState) ProcessLoss(strategy StrategyType) {
 		s.BetAmount = s.BetAmount * 2
 	}
 
+	// Paroli strategy: reset to base bet when a loss occurs.
+	if strategy == ParoliOnPunto || strategy == ParoliOnBanco {
+		s.BetAmount = s.BaseBetAmount
+		s.IsInParoliProgression = false
+		s.ParoliProgressionLevel = 0
+	}
+
 	// Fibonacci strategy: move to next number in sequence after a loss.
 	if strategy == FibonacciOnPunto || strategy == FibonacciOnBanco {
 		// Calculate loss in wager units (1 unit = MinimumBet)
@@ -255,13 +262,6 @@ func (s *SimulatorState) ProcessLoss(strategy StrategyType) {
 		// Calculate new bet amount based on Fibonacci sequence
 		fibValue := GetFibonacciValue(s.FibonacciSequenceIndex)
 		s.BetAmount = float64(fibValue) * MinimumBet
-	}
-
-	// Paroli strategy: reset to base bet when a loss occurs.
-	if strategy == ParoliOnPunto || strategy == ParoliOnBanco {
-		s.BetAmount = s.BaseBetAmount
-		s.IsInParoliProgression = false
-		s.ParoliProgressionLevel = 0
 	}
 
 	// D'Alembert strategy: increase bet by 1 unit after a loss.

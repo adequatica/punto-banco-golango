@@ -141,24 +141,6 @@ func TestMakeStrategy(t *testing.T) {
 			wantBetAmount: 20.0,
 		},
 		{
-			name:     "Fibonacci on Punto returns PuntoPlayer with current bet amount",
-			strategy: FibonacciOnPunto,
-			state: &SimulatorState{
-				BetAmount: 30.0,
-			},
-			wantBetType:   puntobanco.PuntoPlayer,
-			wantBetAmount: 30.0,
-		},
-		{
-			name:     "Fibonacci on Banco returns BancoBanker with current bet amount",
-			strategy: FibonacciOnBanco,
-			state: &SimulatorState{
-				BetAmount: 40.0,
-			},
-			wantBetType:   puntobanco.BancoBanker,
-			wantBetAmount: 40.0,
-		},
-		{
 			name:     "Paroli on Punto returns PuntoPlayer with current bet amount",
 			strategy: ParoliOnPunto,
 			state: &SimulatorState{
@@ -175,6 +157,24 @@ func TestMakeStrategy(t *testing.T) {
 			},
 			wantBetType:   puntobanco.BancoBanker,
 			wantBetAmount: 60.0,
+		},
+		{
+			name:     "Fibonacci on Punto returns PuntoPlayer with current bet amount",
+			strategy: FibonacciOnPunto,
+			state: &SimulatorState{
+				BetAmount: 30.0,
+			},
+			wantBetType:   puntobanco.PuntoPlayer,
+			wantBetAmount: 30.0,
+		},
+		{
+			name:     "Fibonacci on Banco returns BancoBanker with current bet amount",
+			strategy: FibonacciOnBanco,
+			state: &SimulatorState{
+				BetAmount: 40.0,
+			},
+			wantBetType:   puntobanco.BancoBanker,
+			wantBetAmount: 40.0,
 		},
 		{
 			name:     "D'Alembert on Punto returns PuntoPlayer with current bet amount",
