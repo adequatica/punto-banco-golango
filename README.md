@@ -70,6 +70,12 @@ After all cards are drawn, the **hand with the total closest to nine wins**.
 
 All possible combinations are covered with unit tests.
 
+Run all unit tests:
+
+```bash
+go test ./...
+```
+
 ---
 
 ## Simulator
@@ -84,7 +90,7 @@ This simulator runs the _punto banco_ game, and during each round, it bets on Pu
 
 «The game» is a game session, in which the **simulation starts with the bankroll of $1000** and ends when it cannot afford to bet the next bet.
 
-**The default bet in the simulator is $10**, because it is the minimum bet for baccarat in Las Vegas. Therefore, for flat betting strategies, the simulator bets 1% of its initial bankroll in each round.
+**The default bet in the simulator is $10**, because it is the minimum bet for baccarat in Las Vegas. Therefore, for flat betting strategies, the simulator bets 1% of its starting bankroll in each round.
 
 The simulator features a logic-based betting approach: the game ends if the current simulator's bankroll falls below the amount required for the next round.
 

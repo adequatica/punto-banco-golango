@@ -142,7 +142,7 @@ func TestCountThirdCard(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := CountThirdCard(tt.initialDeal, tt.thirdCard)
 			if got != tt.want {
-				t.Errorf("third card %v with Initial deal %v should have value %v, but got %v", tt.thirdCard, tt.initialDeal, tt.want, got)
+				t.Errorf("third card %v with initial deal %v should have value %v, but got %v", tt.thirdCard, tt.initialDeal, tt.want, got)
 			}
 		})
 	}

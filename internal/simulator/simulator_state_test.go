@@ -172,38 +172,38 @@ func TestSimulatorStateCanPlaceBet(t *testing.T) {
 
 func TestSimulatorStatePlaceBet(t *testing.T) {
 	tests := []struct {
-		name            string
-		initialBankroll float64
-		betAmount       float64
-		wantBankroll    float64
+		name             string
+		startingBankroll float64
+		betAmount        float64
+		wantBankroll     float64
 	}{
 		{
-			name:            "place bet reduces bankroll by bet amount",
-			initialBankroll: 1000.0,
-			betAmount:       10.0,
-			wantBankroll:    990.0,
+			name:             "place bet reduces bankroll by bet amount",
+			startingBankroll: 1000.0,
+			betAmount:        10.0,
+			wantBankroll:     990.0,
 		},
 		{
-			name:            "place bet with zero bet amount",
-			initialBankroll: 1000.0,
-			betAmount:       0.0,
-			wantBankroll:    1000.0,
+			name:             "place bet with zero bet amount",
+			startingBankroll: 1000.0,
+			betAmount:        0.0,
+			wantBankroll:     1000.0,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			state := &SimulatorState{
-				CurrentBankroll: tt.initialBankroll,
+				CurrentBankroll: tt.startingBankroll,
 				BetAmount:       tt.betAmount,
 			}
 
-			initialBankroll := state.CurrentBankroll
+			startingBankroll := state.CurrentBankroll
 			state.PlaceBet()
 
 			if state.CurrentBankroll != tt.wantBankroll {
 				t.Errorf("PlaceBet() changed bankroll from %.2f to %.2f, want %.2f",
-					initialBankroll, state.CurrentBankroll, tt.wantBankroll)
+					startingBankroll, state.CurrentBankroll, tt.wantBankroll)
 			}
 		})
 	}

@@ -38,7 +38,7 @@ func TestSimulatorStateProcessWin_FlatBettingStrategies(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			state := NewSimulatorState()
-			initialBankroll := state.CurrentBankroll
+			startingBankroll := state.CurrentBankroll
 			initialWins := state.Wins
 			initialBetAmount := state.BetAmount
 
@@ -50,7 +50,7 @@ func TestSimulatorStateProcessWin_FlatBettingStrategies(t *testing.T) {
 			}
 
 			expectedPayout := CalculatePayout(tt.betType, initialBetAmount)
-			expectedBankroll := initialBankroll + initialBetAmount + expectedPayout
+			expectedBankroll := startingBankroll + initialBetAmount + expectedPayout
 			if state.CurrentBankroll != expectedBankroll {
 				t.Errorf("bankroll should update: got %.2f, want %.2f", state.CurrentBankroll, expectedBankroll)
 			}
