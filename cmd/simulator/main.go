@@ -19,6 +19,9 @@ var (
 	defaultNumberOfSimulations = 10000
 	// Limit of 1M simulations needs just to prevent too long calculations in case of input mistake
 	maxNumberOfSimulations = 999999 // This number of simulations take ~ 25 minutes depends on choosen strategy
+	// Limit 10K cause storing data for a large number of simulations may cause memory exhaustion
+	// Even 10K simulations can create a .gz file larger than 200 MB that contains a JSON file larger than 4.4 GB
+	maxNumberOfSimulationsToSave = 10000
 )
 
 type keyMap struct {
@@ -143,7 +146,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			case stateEnterSimulations:
 				// Toggle save data option when Up is pressed
-				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= 1000 {
+				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= maxNumberOfSimulationsToSave {
 					m.saveData = !m.saveData
 				}
 			}
@@ -158,7 +161,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			case stateEnterSimulations:
 				// Toggle save data option when Down is pressed
-				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= 1000 {
+				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= maxNumberOfSimulationsToSave {
 					m.saveData = !m.saveData
 				}
 			}
@@ -182,8 +185,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				// Parse number of simulations with validation
 				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= maxNumberOfSimulations {
 					m.numSimulations = num
-					// Only save data if <= 1000 simulations
-					if num > 1000 {
+					// Only save data if <= maxNumberOfSimulationsToSave simulations
+					if num > maxNumberOfSimulationsToSave {
 						m.saveData = false
 					}
 					m.stateUI = stateRunningSimulation
@@ -262,9 +265,8 @@ func (m model) View() string {
 		s += "Enter number of simulations to run:\n"
 		s += m.textInput.View()
 
-		// Show save data option only when number of simulations is <= 1000
-		// Cause storing data for large numbers of simulations may cause memory exhaustion
-		if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= 1000 {
+		// Show save data option only when number of simulations is <= maxNumberOfSimulationsToSave
+		if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= maxNumberOfSimulationsToSave {
 			saveStatus := "NO"
 			if m.saveData {
 				saveStatus = "YES"

@@ -87,7 +87,7 @@ type DataCollector struct {
 }
 
 // Create a new data collector for simulation data
-// Storing data for large numbers of simulations (over 1000) may cause memory exhaustion
+// Collecting data for a large number of simulations (over 1000) may cause memory exhaustion
 func NewDataCollector(
 	strategy StrategyType,
 	decksInShoe int,
@@ -272,8 +272,9 @@ func SaveSimulationData(data *SimulationData) error {
 	}
 
 	// Determine the need of gzip compression
-	// 100 simulations may create .json file larger than 43MB with over 92K hands
-	// 1000 simulations may create .json file larger than 440MB with over 930K hands
+	// 100 simulations can create a .json file larger than 43 MB with over 92K hands
+	// 1000 simulations can create a .json file larger than 440 MB with over 930K hands
+	// 10000 simulations can create a .json file larger than 4.4 GB with over 9.3M hands
 	useGzip := data.NumberOfSimulations > 100
 
 	filename := CreateSimulationDataFilename(data.Strategy, data.NumberOfSimulations, useGzip)
