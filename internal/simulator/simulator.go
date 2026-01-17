@@ -124,9 +124,14 @@ func MakeStrategy(strategy StrategyType, state *SimulatorState) (puntobanco.BetT
 	}
 }
 
-func RunSimulator(strategy StrategyType) *SimulatorState {
+func RunSimulator(strategy StrategyType, dataCollector *DataCollector) *SimulatorState {
 	state := NewSimulatorState()
 	shoe := deck.MakeNewShoe()
+
+	// Initialize new game in data collection is enabled
+	if dataCollector != nil {
+		dataCollector.StartNewGame(shoe)
+	}
 
 	// Run simulation until player cannot bet anymore
 	for state.CanPlaceBet() {
@@ -136,11 +141,19 @@ func RunSimulator(strategy StrategyType) *SimulatorState {
 
 		state.PlaceBet()
 
+		// Track shoe length before playing (for data collection)
+		previousShoeLength := len(shoe)
+
 		// Play the game
 		gameResult, err := puntobanco.PlayPuntoBanco(shoe)
 		if err != nil {
 			fmt.Printf("Error playing game: %v\n", err)
 			break
+		}
+
+		// Collect hand data if data collection is enabled
+		if dataCollector != nil {
+			dataCollector.CollectHandData(state, &gameResult, previousShoeLength)
 		}
 
 		// Update shoe for next game
@@ -228,12 +241,24 @@ func NewMultipleSimulationsStats(numSimulations int) MultipleSimulationsStats {
 	}
 }
 
-func RunMultipleSimulations(strategy StrategyType, numSimulations int) MultipleSimulationsStats {
+func RunMultipleSimulations(strategy StrategyType, numSimulations int, saveData bool) MultipleSimulationsStats {
 	if numSimulations <= 0 {
 		numSimulations = 1
 	}
 
 	stats := NewMultipleSimulationsStats(numSimulations)
+
+	// Initialize data collector if saving data is enabled
+	var dataCollector *DataCollector
+	if saveData {
+		dataCollector = NewDataCollector(
+			strategy,
+			deck.NumberOfDecks,
+			Bankroll,
+			MinimumBet,
+			numSimulations,
+		)
+	}
 
 	totalRoundsPlayed := 0
 	totalWins := 0
@@ -243,7 +268,7 @@ func RunMultipleSimulations(strategy StrategyType, numSimulations int) MultipleS
 	totalMaxBankrollReached := 0.0
 
 	for i := 0; i < numSimulations; i++ {
-		state := RunSimulator(strategy)
+		state := RunSimulator(strategy, dataCollector)
 
 		// Track played games stats
 		totalRoundsPlayed += state.RoundsPlayed
@@ -313,6 +338,13 @@ func RunMultipleSimulations(strategy StrategyType, numSimulations int) MultipleS
 	stats.AvgMaxBankrollReached = totalMaxBankrollReached / float64(numSimulations)
 	stats.ProfitableBankrollRate = float64(stats.GamesWithProfitableBankroll) / float64(numSimulations) * 100
 	stats.ProfitableEndGamesRate = float64(stats.GamesWithProfitableEnd) / float64(numSimulations) * 100
+
+	// Save simulation data if collection was enabled
+	if dataCollector != nil {
+		if err := SaveSimulationData(dataCollector.GetSimulationData()); err != nil {
+			fmt.Printf("Failed to save simulation data: %v\n", err)
+		}
+	}
 
 	return stats
 }

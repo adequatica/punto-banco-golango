@@ -74,6 +74,7 @@ type model struct {
 	selectedStrategy   simulator.StrategyType
 	textInput          textinput.Model
 	numSimulations     int
+	saveData           bool
 	stats              simulator.MultipleSimulationsStats
 	keys               keyMap
 	help               help.Model
@@ -110,10 +111,10 @@ type simulationCompleteMsg struct {
 	err   error
 }
 
-func runSimulation(strategy simulator.StrategyType, numSimulations int) tea.Cmd {
+func runSimulation(strategy simulator.StrategyType, numSimulations int, saveData bool) tea.Cmd {
 	return func() tea.Msg {
 		// Run the simulation with error handling
-		stats := simulator.RunMultipleSimulations(strategy, numSimulations)
+		stats := simulator.RunMultipleSimulations(strategy, numSimulations, saveData)
 		// Note: If RunMultipleSimulations could return an error, we would handle it here
 		return simulationCompleteMsg{stats: stats, err: nil}
 	}
@@ -133,20 +134,32 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case key.Matches(msg, m.keys.Up):
-			if m.stateUI == stateSelectStrategy {
+			switch m.stateUI {
+			case stateSelectStrategy:
 				if m.cursor > 0 {
 					m.cursor--
 				} else {
 					m.cursor = len(m.strategyOptions) - 1
 				}
+			case stateEnterSimulations:
+				// Toggle save data option when Up is pressed
+				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= 1000 {
+					m.saveData = !m.saveData
+				}
 			}
 
 		case key.Matches(msg, m.keys.Down):
-			if m.stateUI == stateSelectStrategy {
+			switch m.stateUI {
+			case stateSelectStrategy:
 				if m.cursor < len(m.strategyOptions)-1 {
 					m.cursor++
 				} else {
 					m.cursor = 0
+				}
+			case stateEnterSimulations:
+				// Toggle save data option when Down is pressed
+				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= 1000 {
+					m.saveData = !m.saveData
 				}
 			}
 
@@ -159,6 +172,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.stateUI = stateEnterSimulations
 					m.textInput.SetValue(fmt.Sprintf("%d", defaultNumberOfSimulations))
 					m.textInput.Focus()
+					m.saveData = false // Reset to default NO
 				} else {
 					// Handle invalid state
 					m.cursor = 0
@@ -168,12 +182,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				// Parse number of simulations with validation
 				if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= maxNumberOfSimulations {
 					m.numSimulations = num
+					// Only save data if <= 1000 simulations
+					if num > 1000 {
+						m.saveData = false
+					}
 					m.stateUI = stateRunningSimulation
 					m.simulationStart = time.Now()
 					// Start running simulation
 					return m, tea.Batch(
 						m.spinner.Tick,
-						runSimulation(m.selectedStrategy, m.numSimulations),
+						runSimulation(m.selectedStrategy, m.numSimulations, m.saveData),
 					)
 				}
 
@@ -184,6 +202,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.selectedStrategy = ""
 				m.textInput.SetValue("")
 				m.numSimulations = 0
+				m.saveData = false
 				m.stats = simulator.MultipleSimulationsStats{}
 				m.simulationDuration = 0
 				m.simulationStart = time.Time{}
@@ -242,6 +261,17 @@ func (m model) View() string {
 		s += fmt.Sprintf("Selected strategy: %s\n\n", m.selectedStrategy)
 		s += "Enter number of simulations to run:\n"
 		s += m.textInput.View()
+
+		// Show save data option only when number of simulations is <= 1000
+		// Cause storing data for large numbers of simulations may cause memory exhaustion
+		if num, err := strconv.Atoi(m.textInput.Value()); err == nil && num > 0 && num <= 1000 {
+			saveStatus := "NO"
+			if m.saveData {
+				saveStatus = "YES"
+			}
+			s += fmt.Sprintf("\n\nSave data into a file: %s (Press ↑/↓ to toggle)", saveStatus)
+		}
+
 		s += "\n\nPress ENTER to start simulation"
 
 	case stateRunningSimulation:

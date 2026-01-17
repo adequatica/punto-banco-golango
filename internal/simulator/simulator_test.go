@@ -240,7 +240,7 @@ func TestMakeStrategy(t *testing.T) {
 }
 
 func TestRunSimulator(t *testing.T) {
-	result := RunSimulator(BetOnPunto)
+	result := RunSimulator(BetOnPunto, nil)
 	if result == nil {
 		t.Fatal("simulator's result should not be nil")
 	}
@@ -372,7 +372,7 @@ func TestNewMultipleSimulationsStats(t *testing.T) {
 
 func TestRunMultipleSimulations(t *testing.T) {
 	numberOfTestSimulations := 10
-	result := RunMultipleSimulations(BetOnPunto, numberOfTestSimulations)
+	result := RunMultipleSimulations(BetOnPunto, numberOfTestSimulations, false)
 	if result.TotalSimulations != numberOfTestSimulations {
 		t.Fatal("should run multiple simulations")
 	}

@@ -1,0 +1,1425 @@
+{
+  "strategy": "D'Alembert on Punto",
+  "decksInShoe": 6,
+  "startingBankroll": 1000,
+  "standardBet": 10,
+  "numberOfSimulations": 1,
+  "games": [
+    [
+      {
+        "gameId": 1,
+        "handId": 1,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "3D",
+          "4H"
+        ],
+        "bankoHand": [
+          "KH",
+          "JS",
+          "9D"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 10,
+          "payout": 0,
+          "finalBankroll": 990
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 2,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "2H",
+          "5D"
+        ],
+        "bankoHand": [
+          "3C",
+          "3C"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 6,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 20,
+          "payout": 20,
+          "finalBankroll": 970
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 3,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8C",
+          "9H"
+        ],
+        "bankoHand": [
+          "8S",
+          "QD"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 10,
+          "payout": 0,
+          "finalBankroll": 1000
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 4,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "2C",
+          "AD",
+          "4D"
+        ],
+        "bankoHand": [
+          "6S",
+          "10D"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 6,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 20,
+          "payout": 20,
+          "finalBankroll": 980
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 5,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "AC",
+          "JD"
+        ],
+        "bankoHand": [
+          "2D",
+          "6D"
+        ],
+        "puntoTotal": 1,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 10,
+          "payout": 0,
+          "finalBankroll": 1010
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 6,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "7S",
+          "7D",
+          "QS"
+        ],
+        "bankoHand": [
+          "KS",
+          "KS",
+          "6H"
+        ],
+        "puntoTotal": 4,
+        "bankoTotal": 6,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 20,
+          "payout": 0,
+          "finalBankroll": 990
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 7,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8H",
+          "7H",
+          "9S"
+        ],
+        "bankoHand": [
+          "3H",
+          "10D",
+          "3D"
+        ],
+        "puntoTotal": 4,
+        "bankoTotal": 6,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 30,
+          "payout": 0,
+          "finalBankroll": 960
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 8,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "KS",
+          "9D"
+        ],
+        "bankoHand": [
+          "8C",
+          "AD"
+        ],
+        "puntoTotal": 9,
+        "bankoTotal": 9,
+        "result": "egalite",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 40,
+          "payout": 0,
+          "finalBankroll": 920
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 9,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "JH",
+          "AC",
+          "4D"
+        ],
+        "bankoHand": [
+          "10C",
+          "KC",
+          "AH"
+        ],
+        "puntoTotal": 5,
+        "bankoTotal": 1,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 50,
+          "payout": 50,
+          "finalBankroll": 870
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 10,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QH",
+          "2S",
+          "AD"
+        ],
+        "bankoHand": [
+          "7C",
+          "KD"
+        ],
+        "puntoTotal": 3,
+        "bankoTotal": 7,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 40,
+          "payout": 0,
+          "finalBankroll": 930
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 11,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8H",
+          "5S",
+          "3S"
+        ],
+        "bankoHand": [
+          "8D",
+          "3C",
+          "8S"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 50,
+          "payout": 0,
+          "finalBankroll": 880
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 12,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "JC",
+          "JC",
+          "8D"
+        ],
+        "bankoHand": [
+          "7S",
+          "9H"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 6,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 60,
+          "payout": 60,
+          "finalBankroll": 820
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 13,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8H",
+          "7C",
+          "7D"
+        ],
+        "bankoHand": [
+          "7D",
+          "3H",
+          "AD"
+        ],
+        "puntoTotal": 2,
+        "bankoTotal": 1,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 50,
+          "payout": 50,
+          "finalBankroll": 890
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 14,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "2S",
+          "JC"
+        ],
+        "bankoHand": [
+          "9S",
+          "9S"
+        ],
+        "puntoTotal": 2,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 40,
+          "payout": 0,
+          "finalBankroll": 950
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 15,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "AH",
+          "QH"
+        ],
+        "bankoHand": [
+          "7D",
+          "AH"
+        ],
+        "puntoTotal": 1,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 50,
+          "payout": 0,
+          "finalBankroll": 900
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 16,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "KH",
+          "4H"
+        ],
+        "bankoHand": [
+          "6D",
+          "2S"
+        ],
+        "puntoTotal": 4,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 60,
+          "payout": 0,
+          "finalBankroll": 840
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 17,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "2D",
+          "4D"
+        ],
+        "bankoHand": [
+          "3S",
+          "6C"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 70,
+          "payout": 0,
+          "finalBankroll": 770
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 18,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "5D",
+          "3C"
+        ],
+        "bankoHand": [
+          "5C",
+          "KC"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 5,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 80,
+          "payout": 80,
+          "finalBankroll": 690
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 19,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QC",
+          "2H",
+          "5H"
+        ],
+        "bankoHand": [
+          "2D",
+          "KC",
+          "5S"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 7,
+        "result": "egalite",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 70,
+          "payout": 0,
+          "finalBankroll": 780
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 20,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "6D",
+          "10S"
+        ],
+        "bankoHand": [
+          "7C",
+          "4D",
+          "10C"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 1,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 80,
+          "payout": 80,
+          "finalBankroll": 700
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 21,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "2H",
+          "10S",
+          "5H"
+        ],
+        "bankoHand": [
+          "KS",
+          "QC",
+          "AS"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 1,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 70,
+          "payout": 70,
+          "finalBankroll": 790
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 22,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "5C",
+          "4S"
+        ],
+        "bankoHand": [
+          "7H",
+          "JS"
+        ],
+        "puntoTotal": 9,
+        "bankoTotal": 7,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 60,
+          "payout": 60,
+          "finalBankroll": 870
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 23,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "JC",
+          "8H"
+        ],
+        "bankoHand": [
+          "4S",
+          "QS"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 4,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 50,
+          "payout": 50,
+          "finalBankroll": 940
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 24,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "5H",
+          "7H",
+          "2S"
+        ],
+        "bankoHand": [
+          "4H",
+          "3H"
+        ],
+        "puntoTotal": 4,
+        "bankoTotal": 7,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 40,
+          "payout": 0,
+          "finalBankroll": 1000
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 25,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "10H",
+          "6H"
+        ],
+        "bankoHand": [
+          "QH",
+          "7S"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 7,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 50,
+          "payout": 0,
+          "finalBankroll": 950
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 26,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8H",
+          "8D"
+        ],
+        "bankoHand": [
+          "QD",
+          "KS",
+          "4H"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 4,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 60,
+          "payout": 60,
+          "finalBankroll": 890
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 27,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "9S",
+          "3S",
+          "AS"
+        ],
+        "bankoHand": [
+          "5S",
+          "2H"
+        ],
+        "puntoTotal": 3,
+        "bankoTotal": 7,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 50,
+          "payout": 0,
+          "finalBankroll": 960
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 28,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8S",
+          "7C",
+          "3H"
+        ],
+        "bankoHand": [
+          "KH",
+          "6H"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 6,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 60,
+          "payout": 60,
+          "finalBankroll": 900
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 29,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "4S",
+          "10H",
+          "6H"
+        ],
+        "bankoHand": [
+          "8D",
+          "8D",
+          "8C"
+        ],
+        "puntoTotal": 0,
+        "bankoTotal": 4,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 50,
+          "payout": 0,
+          "finalBankroll": 970
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 30,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "5H",
+          "6C"
+        ],
+        "bankoHand": [
+          "KD",
+          "9H"
+        ],
+        "puntoTotal": 1,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 60,
+          "payout": 0,
+          "finalBankroll": 910
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 31,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "6D",
+          "5C",
+          "6D"
+        ],
+        "bankoHand": [
+          "JC",
+          "3S",
+          "4C"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 7,
+        "result": "egalite",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 70,
+          "payout": 0,
+          "finalBankroll": 840
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 32,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "2C",
+          "9D",
+          "6S"
+        ],
+        "bankoHand": [
+          "2C",
+          "AH",
+          "6S"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 80,
+          "payout": 0,
+          "finalBankroll": 760
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 33,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "KH",
+          "10C",
+          "4S"
+        ],
+        "bankoHand": [
+          "JC",
+          "3D",
+          "3C"
+        ],
+        "puntoTotal": 4,
+        "bankoTotal": 6,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 90,
+          "payout": 0,
+          "finalBankroll": 670
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 34,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "4C",
+          "8C",
+          "JD"
+        ],
+        "bankoHand": [
+          "KS",
+          "5C"
+        ],
+        "puntoTotal": 2,
+        "bankoTotal": 5,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 100,
+          "payout": 0,
+          "finalBankroll": 570
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 35,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QD",
+          "10D",
+          "5D"
+        ],
+        "bankoHand": [
+          "4C",
+          "10S",
+          "JD"
+        ],
+        "puntoTotal": 5,
+        "bankoTotal": 4,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 110,
+          "payout": 110,
+          "finalBankroll": 460
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 36,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "7H",
+          "JS"
+        ],
+        "bankoHand": [
+          "10D",
+          "9C"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 100,
+          "payout": 0,
+          "finalBankroll": 580
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 37,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "AD",
+          "9H",
+          "2D"
+        ],
+        "bankoHand": [
+          "AC",
+          "5D"
+        ],
+        "puntoTotal": 2,
+        "bankoTotal": 6,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 110,
+          "payout": 0,
+          "finalBankroll": 470
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 38,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QS",
+          "AH",
+          "5C"
+        ],
+        "bankoHand": [
+          "10S",
+          "2C",
+          "7C"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 120,
+          "payout": 0,
+          "finalBankroll": 350
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 39,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "3S",
+          "6C"
+        ],
+        "bankoHand": [
+          "JD",
+          "KD"
+        ],
+        "puntoTotal": 9,
+        "bankoTotal": 0,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 130,
+          "payout": 130,
+          "finalBankroll": 220
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 40,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "KC",
+          "7S"
+        ],
+        "bankoHand": [
+          "4C",
+          "JH",
+          "9H"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 3,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 120,
+          "payout": 120,
+          "finalBankroll": 360
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 41,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "5H",
+          "QC",
+          "2H"
+        ],
+        "bankoHand": [
+          "QH",
+          "10C",
+          "5D"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 5,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 110,
+          "payout": 110,
+          "finalBankroll": 490
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 42,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "9S",
+          "KH"
+        ],
+        "bankoHand": [
+          "2S",
+          "4S"
+        ],
+        "puntoTotal": 9,
+        "bankoTotal": 6,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 100,
+          "payout": 100,
+          "finalBankroll": 610
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 43,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "3D",
+          "8S",
+          "AS"
+        ],
+        "bankoHand": [
+          "AC",
+          "6S"
+        ],
+        "puntoTotal": 2,
+        "bankoTotal": 7,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 90,
+          "payout": 0,
+          "finalBankroll": 720
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 44,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "10D",
+          "JD",
+          "7D"
+        ],
+        "bankoHand": [
+          "10H",
+          "JS",
+          "8C"
+        ],
+        "puntoTotal": 7,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 100,
+          "payout": 0,
+          "finalBankroll": 620
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 45,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "6H",
+          "3H"
+        ],
+        "bankoHand": [
+          "9S",
+          "KD"
+        ],
+        "puntoTotal": 9,
+        "bankoTotal": 9,
+        "result": "egalite",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 110,
+          "payout": 0,
+          "finalBankroll": 510
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 46,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QD",
+          "9C"
+        ],
+        "bankoHand": [
+          "AH",
+          "KC"
+        ],
+        "puntoTotal": 9,
+        "bankoTotal": 1,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 120,
+          "payout": 120,
+          "finalBankroll": 390
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 47,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "4S",
+          "10D",
+          "KD"
+        ],
+        "bankoHand": [
+          "AS",
+          "QC",
+          "QD"
+        ],
+        "puntoTotal": 4,
+        "bankoTotal": 1,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 110,
+          "payout": 110,
+          "finalBankroll": 520
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 48,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "6S",
+          "JH"
+        ],
+        "bankoHand": [
+          "9C",
+          "AS",
+          "9C"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 100,
+          "payout": 0,
+          "finalBankroll": 640
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 49,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8S",
+          "JS"
+        ],
+        "bankoHand": [
+          "JH",
+          "9C"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 110,
+          "payout": 0,
+          "finalBankroll": 530
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 50,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QC",
+          "3C",
+          "JD"
+        ],
+        "bankoHand": [
+          "4C",
+          "2S"
+        ],
+        "puntoTotal": 3,
+        "bankoTotal": 6,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 120,
+          "payout": 0,
+          "finalBankroll": 410
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 51,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "KH",
+          "6C"
+        ],
+        "bankoHand": [
+          "7H",
+          "10H"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 7,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 130,
+          "payout": 0,
+          "finalBankroll": 280
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 52,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "5H",
+          "AD"
+        ],
+        "bankoHand": [
+          "6D",
+          "7S",
+          "JH"
+        ],
+        "puntoTotal": 6,
+        "bankoTotal": 3,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 140,
+          "payout": 140,
+          "finalBankroll": 140
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 53,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "QC",
+          "JH"
+        ],
+        "bankoHand": [
+          "6C",
+          "2C"
+        ],
+        "puntoTotal": 0,
+        "bankoTotal": 8,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 130,
+          "payout": 0,
+          "finalBankroll": 290
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 54,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "10H",
+          "AC",
+          "7S"
+        ],
+        "bankoHand": [
+          "2D",
+          "3S",
+          "10C"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 5,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 140,
+          "payout": 140,
+          "finalBankroll": 150
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 55,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "KD",
+          "QS",
+          "5S"
+        ],
+        "bankoHand": [
+          "3D",
+          "AC",
+          "JS"
+        ],
+        "puntoTotal": 5,
+        "bankoTotal": 4,
+        "result": "punto",
+        "bet": {
+          "betOn": "punto",
+          "isWin": true,
+          "betAmount": 130,
+          "payout": 130,
+          "finalBankroll": 300
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 56,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "9H",
+          "4D",
+          "2D"
+        ],
+        "bankoHand": [
+          "5C",
+          "10H"
+        ],
+        "puntoTotal": 5,
+        "bankoTotal": 5,
+        "result": "egalite",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 120,
+          "payout": 0,
+          "finalBankroll": 440
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 57,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "9D",
+          "4C"
+        ],
+        "bankoHand": [
+          "8S",
+          "AS"
+        ],
+        "puntoTotal": 3,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 130,
+          "payout": 0,
+          "finalBankroll": 310
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 58,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "8D",
+          "4H",
+          "KC"
+        ],
+        "bankoHand": [
+          "4D",
+          "8H",
+          "QS"
+        ],
+        "puntoTotal": 2,
+        "bankoTotal": 2,
+        "result": "egalite",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 140,
+          "payout": 0,
+          "finalBankroll": 170
+        }
+      },
+      {
+        "gameId": 1,
+        "handId": 59,
+        "shoeNumber": 1,
+        "puntoHand": [
+          "10S",
+          "5S",
+          "3H"
+        ],
+        "bankoHand": [
+          "5S",
+          "6H",
+          "8C"
+        ],
+        "puntoTotal": 8,
+        "bankoTotal": 9,
+        "result": "banko",
+        "bet": {
+          "betOn": "punto",
+          "isWin": false,
+          "betAmount": 150,
+          "payout": 0,
+          "finalBankroll": 20
+        }
+      }
+    ]
+  ]
+}
