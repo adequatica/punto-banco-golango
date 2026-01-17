@@ -1,6 +1,6 @@
 # Punto Banco (Baccarat) on Go
 
-A Go implementation of the _punto banco_ card game (a version of [baccarat](https://en.wikipedia.org/wiki/Baccarat)), featuring a terminal-based UI built with the [Bubble Tea framework](https://github.com/charmbracelet/bubbletea/).
+A Go implementation of the _punto banco_ card game (a version of [Baccarat](https://en.wikipedia.org/wiki/Baccarat)), featuring a terminal-based UI built with the [Bubble Tea framework](https://github.com/charmbracelet/bubbletea/).
 
 > This implementation does not include a gambling component — no real bets or payouts are involved in the game.
 
@@ -12,7 +12,7 @@ Execute the binary or run the application directly with:
 go run cmd/main.go
 ```
 
-<img width="530" src="./screenshot.png" />
+<img width="530" src="./screenshot-game.png" />
 
 ### Features
 
@@ -116,7 +116,9 @@ Simulator implements the following strategies:
 - D'Alembert
 - 1-3-2-6
 
-The statistics of simulations include the following items:
+**Check the sample dataset of games for each strategy in the `/datasets` directory.**
+
+The simulation statistics include the following items (shows in TUI after the end of simulation):
 
 - Mean rounds per game session until the moment when the gambler can no longer bet.
 - Minimum number of played rounds per game session across all simulations.
@@ -135,4 +137,6 @@ The statistics of simulations include the following items:
 - Profitable games — the percentage of game sessions with a profit opportunity, or the percentage of game sessions in which the bankroll exceeded 101% of the initial value. It shows the percentage of games in which the gambler hit a profit target (in this case $1010 and above) and could have been in profit (won money) if he had stopped betting.
 - Profitably ended games — the percentage of game sessions ended with profit, or the percentage of game sessions that end when the current bankroll exceeds 101% of the initial value. This edge case was explained above.
 
-The data of the simulation of each strategy run on 1M game session simulation is the basis of the article «[When You Run Out of Money Playing Baccarat (Punto Banco)](https://adequatica.github.io/2025/09/02/when-you-run-out-of-money-playing-baccarat-punto-banco.html)».
+<img width="580" src="./screenshot-simulator.png" />
+
+The data from the simulations of each strategy, based on 1M game sessions, forms the basis of the article «[When You Run Out of Money Playing Baccarat (Punto Banco)](https://adequatica.github.io/2025/09/02/when-you-run-out-of-money-playing-baccarat-punto-banco.html)».

@@ -89,7 +89,7 @@ jobs:
           body: |
             ## Punto Banco Golango v${{ github.event.inputs.version }}
 
-            A Go implementation of the *punto banco* card game (a version of Baccarat).
+            A Go implementation of the *punto banco* (a version of Baccarat) card game.
 
             ### Downloads
             - Linux (AMD64): `punto-banco-linux-amd64`

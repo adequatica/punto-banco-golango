@@ -24,6 +24,7 @@ func TestInitialModel(t *testing.T) {
 		strategyOptions: simulator.GetStrategyOptions(),
 		textInput:       ti,
 		numSimulations:  0,
+		saveData:        false,
 		keys:            defaultKeys,
 		help:            help.New(),
 		spinner:         s,
@@ -54,6 +55,11 @@ func TestInitialModel(t *testing.T) {
 	// Compare number of simulations
 	if actualModel.numSimulations != expectedModel.numSimulations {
 		t.Errorf("numSimulations mismatch: got %d, want %d", actualModel.numSimulations, expectedModel.numSimulations)
+	}
+
+	// Compare saveData
+	if actualModel.saveData != expectedModel.saveData {
+		t.Errorf("saveData mismatch: got %v, want %v", actualModel.saveData, expectedModel.saveData)
 	}
 
 	// Compare keys
